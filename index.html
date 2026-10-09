@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALM Guide for Power Apps &amp; Power Automate</title>
+<style>
+  :root{
+    --purple:#742774;
+    --purple-dark:#4b1a4b;
+    --bg:#faf9fb;
+    --card:#ffffff;
+    --text:#222;
+    --muted:#666;
+    --border:#e3dde6;
+    --green:#1f8a4c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+  }
+  header{
+    background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+    color:#fff;
+    padding:56px 24px 72px;
+    text-align:center;
+  }
+  header h1{
+    margin:0 0 12px;
+    font-size:2.2rem;
+  }
+  header p{
+    margin:0 auto;
+    max-width:720px;
+    font-size:1.1rem;
+    opacity:0.95;
+  }
+  .badge{
+    display:inline-block;
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.4);
+    border-radius:20px;
+    padding:6px 16px;
+    font-size:0.85rem;
+    margin-top:18px;
+  }
+  main{
+    max-width:920px;
+    margin:-40px auto 60px;
+    padding:0 20px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.06);
+    padding:28px 32px;
+    margin-bottom:28px;
+  }
+  .toc{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .toc a{
+    text-decoration:none;
+    color:var(--purple-dark);
+    background:#f3edf5;
+    padding:8px 14px;
+    border-radius:8px;
+    font-size:0.92rem;
+    font-weight:600;
+  }
+  .toc a:hover{background:#e8dcec;}
+  h2{
+    color:var(--purple-dark);
+    border-bottom:3px solid #f0e8f2;
+    padding-bottom:10px;
+    margin-top:0;
+  }
+  .step-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;height:32px;
+    border-radius:50%;
+    background:var(--purple);
+    color:#fff;
+    font-weight:700;
+    margin-right:10px;
+    flex-shrink:0;
+  }
+  .step-title{
+    display:flex;
+    align-items:center;
+    font-size:1.25rem;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  ol, ul{
+    padding-left:22px;
+  }
+  li{margin-bottom:8px;}
+  .note{
+    background:#fff8e6;
+    border-left:4px solid #e0a500;
+    padding:12px 16px;
+    border-radius:6px;
+    margin:16px 0;
+    font-size:0.95rem;
+  }
+  .success{
+    background:#eafaf0;
+    border-left:4px solid var(--green);
+    padding:12px 16px;
+    border-radius:6px;
+    margin:16px 0;
+    font-size:0.95rem;
+  }
+  img{
+    max-width:100%;
+    border-radius:8px;
+    border:1px solid var(--border);
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    margin:14px 0;
+    display:block;
+  }
+  code{
+    background:#f3edf5;
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:0.9em;
+  }
+  .rules li{margin-bottom:10px;}
+  footer{
+    text-align:center;
+    color:var(--muted);
+    padding:30px 20px 50px;
+    font-size:0.85rem;
+  }
+  .chip{
+    display:inline-block;
+    background:#f3edf5;
+    color:var(--purple-dark);
+    padding:3px 10px;
+    border-radius:12px;
+    font-size:0.78rem;
+    font-weight:600;
+    margin-left:8px;
+  }
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  @media(max-width:700px){
+    .grid-2{grid-template-columns:1fr;}
+    header{padding:40px 16px 60px;}
+    header h1{font-size:1.6rem;}
+    .card{padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Application Lifecycle Management (ALM)<br>for Power Apps &amp; Power Automate</h1>
+  <p>A practical, verified, step-by-step guide to moving your apps and flows safely from Development to Test to Production using Microsoft's current recommended approach — Solutions and Power Platform Pipelines.</p>
+  <div class="badge">✅ Every step in this guide was tested live end-to-end before publishing</div>
+</header>
+
+<main>
+
+  <div class="card">
+    <h2 style="margin-top:0;">On this page</h2>
+    <div class="toc">
+      <a href="#why">Why ALM</a>
+      <a href="#step1">Step 1: Solution</a>
+      <a href="#step2">Step 2: Build</a>
+      <a href="#step3">Step 3: Pipeline</a>
+      <a href="#step4">Step 4: Deploy</a>
+      <a href="#step5">Step 5: Verify</a>
+      <a href="#rules">Golden Rules</a>
+    </div>
+  </div>
+
+  <div class="card" id="why">
+    <h2>Why ALM matters</h2>
+    <p>Application Lifecycle Management keeps your production Power Apps and Power Automate flows stable while you keep building and testing. Instead of editing live apps directly in production, you build in an isolated <strong>Development</strong> environment, package your work into a <strong>Solution</strong>, and use a <strong>Pipeline</strong> to promote it safely to <strong>Test</strong> and eventually <strong>Production</strong>.</p>
+    <p>Microsoft's current (2026) recommended approach for this is:</p>
+    <ul>
+      <li><strong>Solutions</strong> — the container that holds your apps, flows, tables, and other components</li>
+      <li><strong>Power Platform Pipelines</strong> — the built-in, no-code deployment tool that moves solutions between environments in a few clicks</li>
+    </ul>
+  </div>
+
+  <div class="card" id="step1">
+    <div class="step-title"><span class="step-num">1</span> Create a Solution (not the Default Solution)</div>
+    <ol>
+      <li>Go to <code>make.powerapps.com</code> and select your <strong>Development environment</strong> from the environment switcher (top right).</li>
+      <li>In the left navigation, select <strong>Solutions</strong> → <strong>+ New solution</strong>.</li>
+      <li>Enter a <strong>Display name</strong> (e.g. <code>ALM Demo Solution</code>).</li>
+      <li>Click <strong>+ New publisher</strong> and provide:
+        <ul>
+          <li>Display name (e.g. <code>ALM Demo Publisher</code>)</li>
+          <li>Name (e.g. <code>ALMDemoPublisher</code>)</li>
+          <li>A short <strong>Prefix</strong> (e.g. <code>almdemo</code>)</li>
+        </ul>
+        Click <strong>Save</strong>.
+      </li>
+      <li>Click <strong>Create</strong>.</li>
+    </ol>
+    <div class="note"><strong>Why a custom publisher?</strong> The prefix tags every component you build (e.g. <code>almdemo_MyTable</code>) so it never collides with Microsoft's or another publisher's component names.</div>
+    <div class="grid-2">
+      <img src="images/01-new-solution.png" alt="New solution dialog">
+      <img src="images/02-new-publisher.png" alt="New publisher dialog">
+    </div>
+    <img src="images/03-solution-created.png" alt="Solution created and open">
+  </div>
+
+  <div class="card" id="step2">
+    <div class="step-title"><span class="step-num">2</span> Build everything inside that Solution</div>
+    <p>Inside your new solution, click <strong>New</strong> and choose what you want to build:</p>
+    <ul>
+      <li><strong>App</strong> — Canvas or model-driven app</li>
+      <li><strong>Automation → Cloud flow</strong> — Power Automate flow</li>
+      <li><strong>Table</strong> — Dataverse table</li>
+    </ul>
+    <div class="note">Never build loose components in the "Default Solution." Anything outside a named solution cannot be reliably exported or promoted between environments.</div>
+    <img src="images/04-flow-in-solution.png" alt="Cloud flow added inside the solution">
+  </div>
+
+  <div class="card" id="step3">
+    <div class="step-title"><span class="step-num">3</span> Set up a Pipeline</div>
+    <p>Power Platform Pipelines is Microsoft's modern, no-code ALM tool — it replaced manual export/import. It's enabled tenant-wide by default (the "platform host"), so no admin setup is required for personal use.</p>
+    <ol>
+      <li>Open your solution → left navigation → <strong>Pipelines</strong> tab.</li>
+      <li>Click <strong>Create new pipeline</strong>.</li>
+      <li>Give it a name (e.g. <code>Dev to Test</code>).</li>
+      <li><strong>Source Environment</strong> automatically fills in as your current (Dev) environment.</li>
+      <li>Choose your <strong>Target Environment</strong> (your Test or sandbox environment) from the list.</li>
+      <li>Click <strong>Save</strong>.</li>
+    </ol>
+    <div class="grid-2">
+      <img src="images/05-create-pipeline.png" alt="Create pipeline panel">
+      <img src="images/06-target-selected.png" alt="Target environment selected">
+    </div>
+    <img src="images/07-pipeline-created.png" alt="Pipeline created successfully">
+  </div>
+
+  <div class="card" id="step4">
+    <div class="step-title"><span class="step-num">4</span> Deploy</div>
+    <ol>
+      <li>On the Pipelines screen, click <strong>Deploy here</strong> under your target environment's card.</li>
+      <li>Confirm the pipeline, target, and schedule (choose <strong>Now</strong>) → click <strong>Next</strong>.</li>
+      <li>Review the summary — the version number auto-increments (e.g. <code>1.0.0.0 → 1.0.0.1</code>) and an AI-generated deployment note is included.</li>
+      <li>Click <strong>Deploy</strong>.</li>
+      <li>Wait roughly 30–60 seconds. Status will update to <em>"Last successfully installed version X.X.X.X"</em>.</li>
+    </ol>
+    <img src="images/08-deploy-summary.png" alt="Deployment summary screen">
+    <div class="success">✅ Verified: deployment completed successfully in a live test run of this exact guide.</div>
+    <img src="images/09-deploy-success.png" alt="Deployment success confirmation">
+  </div>
+
+  <div class="card" id="step5">
+    <div class="step-title"><span class="step-num">5</span> Verify in the target environment</div>
+    <ol>
+      <li>Switch to the target environment.</li>
+      <li>Go to <strong>Solutions</strong> → filter by <strong>Managed</strong>.</li>
+      <li>Your solution appears there as read-only/managed.</li>
+    </ol>
+    <div class="note">You cannot edit components directly inside a Managed solution. All future changes happen back in Dev, then get redeployed through the pipeline.</div>
+    <img src="images/10-verified-managed.png" alt="Solution verified as managed in target environment">
+  </div>
+
+  <div class="card rules" id="rules">
+    <h2>Golden Rules to keep ALM healthy</h2>
+    <ul>
+      <li><strong>Always build in Dev (unmanaged)</strong>, always deploy as <strong>Managed</strong> downstream.</li>
+      <li><strong>Never edit components directly in a Managed environment</strong> — edit in Dev, then redeploy through the pipeline.</li>
+      <li>Keep <strong>Dev / Test / Production</strong> as separate environments — one Dataverse database per environment.</li>
+      <li>Use the <strong>same publisher and prefix</strong> for a given solution across its entire lifecycle.</li>
+      <li>For multiple developers or solutions, consider adding <strong>source control (Git)</strong> via the Pipelines <em>"Source control"</em> tab for full version history.</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer>
+  Guide verified end-to-end in a live Power Platform tenant.
+</footer>
+
+</body>
+</html>
